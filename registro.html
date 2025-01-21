@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro de Usuario</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KyZXEJ6vJ4lS1xQ9E6v9N9wpLQ45c96b1Xz4iIsdGxtrZf0iZVgUVoxt0dN2FZtM" crossorigin="anonymous">
+    <style>
+body {
+    background-color: #121212;
+    color: white;
+    font-family: Arial, sans-serif;
+}
+
+.form-container {
+    max-width: 450px;
+    margin: 50px auto;
+    background-color: #1f1f1f;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+h2 {
+    color: #fff;
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.form-label {
+    color: #ddd;
+    font-size: 1.1rem;
+}
+
+.form-container input,
+.form-container select {
+    background-color: #333;
+    border: 1px solid #444;
+    color: white;
+    border-radius: 10px;
+    padding: 14px;
+    font-size: 1.1rem;
+    width: 95%;
+    margin-bottom: 20px;
+}
+
+.form-container input:focus,
+.form-container select:focus {
+    outline: none;
+    border-color: #4CAF50;
+    box-shadow: 0 0 8px rgba(76, 175, 80, 0.7);
+}
+
+.form-container select {
+    appearance: none; /* Ocultar flecha predeterminada en navegadores */
+    background-image: url('data:image/svg+xml;charset=US-ASCII,%3csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 4 5%27%3e%3cpath fill=%27%23ddd%27 d=%27M2 0L0 2h4z%27/%3e%3c/svg%3e');
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    background-size: 10px;
+}
+
+.form-container button {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    padding: 14px;
+    font-size: 1.1rem;
+    width: 100%;
+}
+
+.form-container button:hover {
+    background-color: #45a049;
+}
+
+.btn_dashboard {
+    background-color: #fc4a61;
+    color: white;
+    font-size: 16px;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+    margin-top: 20px;
+}
+
+.btn_dashboard:hover {
+    background-color: #f82e47;
+}
+
+.btn-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 30px;
+}
+
+    </style>
+</head>
+<body>
+
+    <div class="form-container">
+        <h2>Registro de Usuario</h2>
+        <form action="registro.php" method="POST">
+            <div class="mb-3">
+                <label for="nombre" class="form-label">Nombre:</label>
+                <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Escribe tu nombre" required>
+            </div>
+        
+            <div class="mb-3">
+                <label for="email" class="form-label">Correo Electrónico:</label>
+                <input type="email" class="form-control" id="email" name="email" placeholder="Escribe tu correo electrónico" required>
+            </div>
+            
+            <div class="mb-3">
+                <label for="password" class="form-label">Contraseña:</label>
+                <input type="password" class="form-control" id="password" name="password" placeholder="Escribe tu contraseña" required>
+            </div>
+            
+            <div class="mb-3">
+                <label for="genero" class="form-label">Género:</label>
+                <select class="form-control" id="genero" name="genero" required>
+                    <option value="" disabled selected>Selecciona tu género</option>
+                    <option value="Masculino">Masculino</option>
+                    <option value="Femenino">Femenino</option>
+                    <option value="Otro">Otro</option>
+                    <option value="Prefiero no decirlo">Prefiero no decirlo</option>
+                </select>
+            </div>
+    
+            <div class="mb-3">
+                <label for="direccion" class="form-label">Dirección:</label>
+                <input type="text" class="form-control" id="direccion" name="direccion" placeholder="Escribe tu dirección" required>
+            </div>
+    
+            <div class="mb-3">
+                <label for="nacionalidad" class="form-label">Nacionalidad:</label>
+                <input type="text" class="form-control" id="nacionalidad" name="nacionalidad" placeholder="Escribe tu nacionalidad" required>
+            </div>
+    
+            <div class="mb-3">
+                <label for="num_telefono" class="form-label">Número de Celular:</label>
+                <input type="tel" class="form-control" id="num_telefono" name="num_telefono" placeholder="Escribe tu número" pattern="[0-9]{7,8}" title="Ingresa un número válido de 7 u 8 dígitos para Bolivia" required>
+            </div>
+    
+            <div class="mb-3">
+                <label for="fecha_nacimiento" class="form-label">Fecha de Nacimiento:</label>
+                <input type="date" class="form-control" id="fecha_nacimiento" name="fecha_nacimiento" required>
+            </div>
+    
+            <!-- Rol ID configurado como oculto y con valor predeterminado de 2 -->
+            <input type="hidden" name="rol_id" value="2">
+            
+            <button type="submit" class="btn btn-success w-100">Registrarse</button>
+        </form>
+    </div>
+    
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pzjw8f+ua7Kw1TIq0G6rfOzoqk8i1VnlpzlwvfdX76A1yTFL5wPvBX0tTtDeW6DJ" crossorigin="anonymous"></script>
+</body>
+</html>
