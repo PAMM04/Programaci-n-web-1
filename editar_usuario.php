@@ -2,8 +2,8 @@
 session_start();
 require_once "conexion.php";
 
-if (!isset($_SESSION['idusuario']) || $_SESSION['rol_id'] != 1) {
-    header('Location: login.php');
+if (!isset($_SESSION['idusuario'])) {
+    header('Location: login.html');
     exit;
 }
 

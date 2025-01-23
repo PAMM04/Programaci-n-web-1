@@ -55,10 +55,23 @@ $puedeGestionarUsuarios = in_array('gestionar_usuarios', $permisos);
 $puedeCrearNoticia = in_array('crear_noticia', $permisos);
 
 // Obtener noticias para el dashboard
-$queryNoticias = "SELECT id_noticias, titulo, SUBSTRING(contenido, 1, 100) AS resumen, imagen, fecha_creacion
-                  FROM noticias 
-                  ORDER BY fecha_creacion DESC";
-$resultNoticias = $conexion->query($queryNoticias);
+$searchTerm = isset($_GET['search']) ? $_GET['search'] : '';
+if ($searchTerm) {
+    $queryNoticias = "SELECT id_noticias, titulo, SUBSTRING(contenido, 1, 100) AS resumen, imagen, fecha_creacion
+                      FROM noticias 
+                      WHERE titulo LIKE ? OR contenido LIKE ?
+                      ORDER BY fecha_creacion DESC";
+    $stmtNoticias = $conexion->prepare($queryNoticias);
+    $searchTerm = '%' . $searchTerm . '%';
+    $stmtNoticias->bind_param("ss", $searchTerm, $searchTerm);
+    $stmtNoticias->execute();
+    $resultNoticias = $stmtNoticias->get_result();
+} else {
+    $queryNoticias = "SELECT id_noticias, titulo, SUBSTRING(contenido, 1, 100) AS resumen, imagen, fecha_creacion
+                      FROM noticias 
+                      ORDER BY fecha_creacion DESC";
+    $resultNoticias = $conexion->query($queryNoticias);
+}
 
 ?>
 <!DOCTYPE html>
@@ -110,10 +123,11 @@ $resultNoticias = $conexion->query($queryNoticias);
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <form class="d-flex" role="search">
-        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-        <button class="btn btn-outline-success" type="submit">Search</button>
-      </form>
+    <form class="d-flex" role="search" method="GET">
+    <input class="form-control me-2" type="search" name="search" placeholder="Buscar" aria-label="Buscar">
+    <button class="btn btn-outline-success" type="submit">Buscar</button>
+</form>
+
       <ul class="navbar-nav ms-auto">
     <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -128,13 +142,9 @@ $resultNoticias = $conexion->query($queryNoticias);
             </li>
             <li><hr class="dropdown-divider"></li>
             <?php if ($puedeGestionarUsuarios): ?>
-                <li><a class="dropdown-item" href="manage_users.php">Gestionar Usuarios</a></li>
+                <li><a class="dropdown-item" href="manage_users.php">Gestion de datos</a></li>
                 <li><a class="dropdown-item" href="view_logs.php">Ver Registros</a></li>
                 <li><a class="dropdown-item" href="settings.php">Configuraciones del Sistema</a></li>
-                <li><a class="dropdown-item" href="lista_noticias.php">Listar Noticias</a></li>
-            <?php endif; ?>
-            <?php if ($puedeCrearNoticia): ?>
-                <li><a class="dropdown-item" href="subir_noticia.php">Crear Noticia</a></li>
             <?php endif; ?>
             <?php if (!isset($_SESSION['id_usuario'])): ?>
                 <li><a class="dropdown-item" href="login.html">Iniciar sesión</a></li>
@@ -181,5 +191,8 @@ $resultNoticias = $conexion->query($queryNoticias);
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
 </body>
 </html>
+
+
