@@ -43,7 +43,7 @@ $resultNoticias = $conexion->query($queryNoticias);
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body {
-            background-color: #121212;
+            background-color:rgb(201, 201, 201);
             color: #fff;
         }
         .table-dark th, .table-dark td {
@@ -54,6 +54,7 @@ $resultNoticias = $conexion->query($queryNoticias);
         }
 
         .btn_dashboard {
+            font-weight: bold;
             background-color: #fc4a61; /* Color rojo sandía */
             color: white;
             font-size: 16px;
@@ -72,7 +73,8 @@ $resultNoticias = $conexion->query($queryNoticias);
         }
 
         .btn_crear {
-            background-color:rgb(37, 196, 98); /* Color verde */
+            font-weight: bold;
+            background-color:#212529; /* Color verde */
             color: white;
             font-size: 16px;
             padding: 12px 24px;
@@ -86,7 +88,7 @@ $resultNoticias = $conexion->query($queryNoticias);
         }
 
         .btn_crear:hover {
-            background-color:rgb(53, 248, 46); /* Verde más oscuro al pasar el cursor */
+            background-color:rgb(90, 90, 90); /* Verde más oscuro al pasar el cursor */
         }
 
         /* Alineación centrada del botón */

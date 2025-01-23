@@ -111,10 +111,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <title>Subir Noticia</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
+<style>
+     body {
+            background-color:rgb(201, 201, 201);
+        }
+
+</style>
 <body>
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container-fluid">
-        <a class="navbar-brand" href="#">Dashboard</a>
+        <a class="navbar-brand" href="dashboard.php">Dashboard</a>
         <ul class="navbar-nav ms-auto">
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">

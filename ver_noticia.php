@@ -39,21 +39,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['comentario']) && !iss
     $comentario = trim($_POST['comentario']);
     $comentarioPadre = isset($_POST['comentario_padre']) ? intval($_POST['comentario_padre']) : null;
 
-    if (!empty($comentario)) {
-        $queryComentario = "INSERT INTO comentarios (id_noticia, id_usuario, contenido, estado, fecha, id_comentario_padre) 
-                            VALUES (?, ?, ?, 'pendiente', NOW(), ?)";
-        $stmtComentario = $conexion->prepare($queryComentario);
-
-        if ($stmtComentario) {
-            $stmtComentario->bind_param("iisi", $idnoticia, $idusuario, $comentario, $comentarioPadre);
-            $stmtComentario->execute();
-            $stmtComentario->close();
-            $mensaje = "Comentario enviado para revisión.";
-        } else {
-            $mensaje = "Error al preparar la consulta de comentario.";
-        }
-    } else {
+    // Validación básica del comentario
+    if (empty($comentario)) {
         $mensaje = "El comentario no puede estar vacío.";
+    } else {
+        $queryComentario = "INSERT INTO comentarios (id_noticia, id_usuario, id_comentario_padre, contenido, estado) 
+                            VALUES (?, ?, ?, ?, ?)";
+        $stmtComentario = $conexion->prepare($queryComenario);
+
+        if ($stmtComenario) {
+            // Los parámetros deben coincidir en número y tipo con los "?" en la consulta
+            // i: integer, s: string
+            $estado = 'activo'; // Definir el estado como una variable para mayor claridad
+            $stmtComenario->bind_param("iiiss", $idnoticia, $idusuario, $comentarioPadre, $comentario, $estado);
+            if ($stmtComenario->execute()) {
+                // Cerrar la sentencia preparada después de ejecutarla es buena práctica
+                $stmtComenario->close();
+                $mensaje = "Comentario enviado para revisión.";
+            } else {
+                // Manejar el error específico que ocurrió durante la ejecución
+                $mensaje = "Error al enviar el comentario: " . mysqli_error($conexion);
+            }
+        } else {
+            // Manejar el error específico que ocurrió al preparar la consulta
+            $mensaje = "Error al preparar la consulta de comentario: " . mysqli_error($conexion);
+        }
     }
 }
 
@@ -99,7 +109,7 @@ $resultRelacionadas = $stmtRelacionadas->get_result();
 $queryComentarios = "SELECT c.id_comentario, c.contenido, c.fecha_comen, c.id_comentario_padre, u.nombre AS autor 
                      FROM comentarios c
                      JOIN usuario u ON c.id_usuario = u.id_usuario
-                     WHERE c.id_noticia = ? AND c.estado = 'aprobado'
+                     WHERE c.id_noticia = ? AND c.estado = 'acrtivo'
                      ORDER BY c.id_comentario_padre ASC, c.fecha_comen ASC";
 $stmtComentarios = $conexion->prepare($queryComentarios);
 

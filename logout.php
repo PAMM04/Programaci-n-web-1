@@ -6,6 +6,6 @@ session_unset(); // Elimina todas las variables de sesión
 session_destroy(); // Destruye la sesión actual
 
 // Redirigir al login
-header("Location: login.html");
+header("Location: dashboard.php");
 exit;
 ?>

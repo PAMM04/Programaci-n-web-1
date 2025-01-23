@@ -84,7 +84,7 @@ if ($searchTerm) {
      <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <style>
         body {
-            background-color: #121212;
+            background-color:rgb(201, 201, 201);
             color: #fff;
         }
         .navbar {
@@ -94,7 +94,7 @@ if ($searchTerm) {
             color: #fff;
         }
         .card {
-            background-color: #1f1f1f;
+            background-color: #212529;
             border: none;
         }
         .card h5 {
@@ -113,10 +113,20 @@ if ($searchTerm) {
             object-fit: cover;      /* Recorta la imagen para llenar el espacio sin deformarse */
             object-position: center; /* Centra la parte visible de la imagen recortada */
         }
+
+
+        .highlight-section {
+            background-color:rgb(113, 113, 113); /* Color diferente para destacar */
+            color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        
     </style>
 </head>
 <body>
-<nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+<nav class="navbar navbar-expand-lg sticky-top" data-bs-theme="dark">
   <div class="container-fluid">
     <a class="navbar-brand" href="#">Dashboard</a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -164,6 +174,9 @@ if ($searchTerm) {
     <div class="container mt-4">
     <div class="row">
         <?php if ($puedeVerDashboard): ?>
+            <div class="highlight-section">
+                    
+            </div>
             <h2>Noticias</h2>
             <div class="row">
                 <?php while ($noticia = $resultNoticias->fetch_assoc()): ?>
