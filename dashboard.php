@@ -33,6 +33,7 @@ if (!isset($_SESSION['id_usuario'])) {
         ];
     }
 }
+
 // Cargar los permisos del rol del usuario
 $queryPermisos = "
     SELECT p.nombre 
@@ -55,10 +56,23 @@ $puedeGestionarUsuarios = in_array('gestionar_usuarios', $permisos);
 $puedeCrearNoticia = in_array('crear_noticia', $permisos);
 
 // Obtener noticias para el dashboard
-$queryNoticias = "SELECT id_noticias, titulo, SUBSTRING(contenido, 1, 100) AS resumen, imagen, fecha_creacion
-                  FROM noticias 
-                  ORDER BY fecha_creacion DESC";
-$resultNoticias = $conexion->query($queryNoticias);
+$searchTerm = isset($_GET['search']) ? $_GET['search'] : '';
+if ($searchTerm) {
+    $queryNoticias = "SELECT id_noticias, titulo, SUBSTRING(contenido, 1, 100) AS resumen, imagen, fecha_creacion
+                      FROM noticias 
+                      WHERE titulo LIKE ? OR contenido LIKE ?
+                      ORDER BY fecha_creacion DESC";
+    $stmtNoticias = $conexion->prepare($queryNoticias);
+    $searchTerm = '%' . $searchTerm . '%';
+    $stmtNoticias->bind_param("ss", $searchTerm, $searchTerm);
+    $stmtNoticias->execute();
+    $resultNoticias = $stmtNoticias->get_result();
+} else {
+    $queryNoticias = "SELECT id_noticias, titulo, SUBSTRING(contenido, 1, 100) AS resumen, imagen, fecha_creacion
+                      FROM noticias 
+                      ORDER BY fecha_creacion DESC";
+    $resultNoticias = $conexion->query($queryNoticias);
+}
 
 ?>
 <!DOCTYPE html>
@@ -68,7 +82,7 @@ $resultNoticias = $conexion->query($queryNoticias);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard</title>
     <!-- Bootstrap CSS -->
-     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <style>
         body {
             background-color: #121212;
@@ -95,10 +109,10 @@ $resultNoticias = $conexion->query($queryNoticias);
             border: none;
         }
         .card-img-top {
-            width: 100%;            /* Asegura que ocupe todo el ancho del contenedor */
-            height: 200px;          /* Altura fija para uniformidad */
-            object-fit: cover;      /* Recorta la imagen para llenar el espacio sin deformarse */
-            object-position: center; /* Centra la parte visible de la imagen recortada */
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            object-position: center;
         }
     </style>
 </head>
@@ -110,20 +124,9 @@ $resultNoticias = $conexion->query($queryNoticias);
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="logout.php">Cerrar sesión</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="login.html">Iniciar sesión</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link disabled" aria-disabled="true">Disabled</a>
-        </li>
-      </ul>
-      <form class="d-flex" role="search">
-        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-        <button class="btn btn-outline-success" type="submit">Search</button>
+      <form class="d-flex" role="search" method="GET">
+        <input class="form-control me-2" type="search" name="search" placeholder="Buscar" aria-label="Buscar">
+        <button class="btn btn-outline-success" type="submit">Buscar</button>
       </form>
       <ul class="navbar-nav ms-auto">
     <li class="nav-item dropdown">
@@ -140,11 +143,20 @@ $resultNoticias = $conexion->query($queryNoticias);
             <li><hr class="dropdown-divider"></li>
             <?php if ($puedeGestionarUsuarios): ?>
                 <li><a class="dropdown-item" href="manage_users.php">Gestionar Usuarios</a></li>
+                <li><a class="dropdown-item" href="view_logs.php">Ver Registros</a></li>
+                <li><a class="dropdown-item" href="settings.php">Configuraciones del Sistema</a></li>
+                <li><a class="dropdown-item" href="lista_noticias.php">Listar Noticias</a></li>
             <?php endif; ?>
             <?php if ($puedeCrearNoticia): ?>
                 <li><a class="dropdown-item" href="subir_noticia.php">Crear Noticia</a></li>
             <?php endif; ?>
-            <li><a class="dropdown-item" href="logout.php">Cerrar sesión</a></li>
+            <?php if (!isset($_SESSION['id_usuario'])): ?>
+                <li><a class="dropdown-item" href="login.html">Iniciar sesión</a></li>
+            <?php else: ?>
+                <li><a class="dropdown-item" href="logout.php">Cerrar sesión</a></li>
+            <?php endif; ?>
+
+            
         </ul>
     </li>
 </ul>
@@ -155,15 +167,6 @@ $resultNoticias = $conexion->query($queryNoticias);
 
     <div class="container mt-4">
     <div class="row">
-            <div class="col-md-6">
-                <div class="card mb-3">
-                    <div class="card-body">
-                        <h5 class="card-title">Bienvenido, <?php echo htmlspecialchars($usuario['nombre']); ?></h5>
-                        <p class="card-text"><strong>Email:</strong> <?php echo htmlspecialchars($usuario['email']); ?></p>
-                    </div>
-                </div>
-            </div>
-
         <?php if ($puedeVerDashboard): ?>
             <h2>Noticias</h2>
             <div class="row">
@@ -186,30 +189,8 @@ $resultNoticias = $conexion->query($queryNoticias);
             </div>
         <?php endif; ?>
         
-        <?php if ($puedeGestionarUsuarios): ?>
-            <div class="col-md-6">
-                <div class="card mb-3">
-                    <div class="card-body">
-                        <h5 class="card-title">Herramientas</h5>
-                        <ul>
-                            <li><a href="manage_users.php" class="text-decoration-none text-primary">Gestionar Usuarios</a></li>
-                            <li><a href="view_logs.php" class="text-decoration-none text-primary">Ver Registros</a></li>
-                            <li><a href="settings.php" class="text-decoration-none text-primary">Configuraciones del Sistema</a></li>
-                            <li><a href="lista_noticias.php" class="text-decoration-none text-primary">Listar Noticias</a></li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        <?php endif; ?>
-
-        <?php if ($puedeCrearNoticia): ?>
-            <li><a href="subir_noticia.php" class="text-decoration-none text-primary">Crear Noticia</a></li>
-        <?php endif; ?>
                         
         
     </div>
 
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
+    <!-- Bootstrap JS[_{{{CITATION{{{_1{](https://github.com/samir04m/VotacionesUnimagWeb2018/tree/068daee4db1ec8bf1c791fd3d4bb4fba28af7862/view%2FnoFound.php)[_{{{CITATION{{{_2{](https://github.com/samir04m/SistemaVotacionWeb2018_NoDB/tree/075ab38aafabc453bdfafc1b5e9ca54354cb54d9/views%2Ftemplate.php)[_{{{CITATION{{{_3{](https://github.com/Amankori2307/ELearning/tree/80fd4adecd1f3f91288274549f2f3d67303def96/Admin%2FadminIncludes%2Fheader.php)[_{{{CITATION{{{_4{](https://github.com/Dhruv-Kharkwal/academic_records_management_system/tree/efac4221d8a65dcd7860e126f952cc946be78049/dashboard_home.php)[_{{{CITATION{{{_5{](https://github.com/nghialeminhbk/ATTT_license_key/tree/a0ca5a4245a44ec940c6d82dd5ba5e05913f1534/app%2Findex.php)[_{{{CITATION{{{_6{](https://github.com/adewalecharles/colnect_test/tree/3a6277cb13d61a8b70a3ff0faefea49cb5cfd952/index.php)[_{{{CITATION{{{_7{](https://github.com/muhammadnassuha/dompetdonasi/tree/8eea83b795f2efb9800528ea0d75534a401acdfd/login_user%2Fall_campaign_user%2Findex.php)[_{{{CITATION{{{_8{](https://github.com/deysihernandez/webscone1/tree/4a180d8c2aef98901d8aa3866602b214d0e445c5/resources%2Fviews%2Fadmin%2Fprimerosoftware%2Fsoftware.blade.php)[_{{{CITATION{{{_9{](https://github.com/arightruckuss/Company-Director/tree/f55fa920416fbc7fdc64dca46b09d264fc2b6faa/Company_Directory%2Findex.php)
