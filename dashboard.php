@@ -33,7 +33,6 @@ if (!isset($_SESSION['id_usuario'])) {
         ];
     }
 }
-
 // Cargar los permisos del rol del usuario
 $queryPermisos = "
     SELECT p.nombre 
@@ -56,23 +55,10 @@ $puedeGestionarUsuarios = in_array('gestionar_usuarios', $permisos);
 $puedeCrearNoticia = in_array('crear_noticia', $permisos);
 
 // Obtener noticias para el dashboard
-$searchTerm = isset($_GET['search']) ? $_GET['search'] : '';
-if ($searchTerm) {
-    $queryNoticias = "SELECT id_noticias, titulo, SUBSTRING(contenido, 1, 100) AS resumen, imagen, fecha_creacion
-                      FROM noticias 
-                      WHERE titulo LIKE ? OR contenido LIKE ?
-                      ORDER BY fecha_creacion DESC";
-    $stmtNoticias = $conexion->prepare($queryNoticias);
-    $searchTerm = '%' . $searchTerm . '%';
-    $stmtNoticias->bind_param("ss", $searchTerm, $searchTerm);
-    $stmtNoticias->execute();
-    $resultNoticias = $stmtNoticias->get_result();
-} else {
-    $queryNoticias = "SELECT id_noticias, titulo, SUBSTRING(contenido, 1, 100) AS resumen, imagen, fecha_creacion
-                      FROM noticias 
-                      ORDER BY fecha_creacion DESC";
-    $resultNoticias = $conexion->query($queryNoticias);
-}
+$queryNoticias = "SELECT id_noticias, titulo, SUBSTRING(contenido, 1, 100) AS resumen, imagen, fecha_creacion
+                  FROM noticias 
+                  ORDER BY fecha_creacion DESC";
+$resultNoticias = $conexion->query($queryNoticias);
 
 ?>
 <!DOCTYPE html>
@@ -82,7 +68,7 @@ if ($searchTerm) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard</title>
     <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <style>
         body {
             background-color: #121212;
@@ -109,10 +95,10 @@ if ($searchTerm) {
             border: none;
         }
         .card-img-top {
-            width: 100%;
-            height: 200px;
-            object-fit: cover;
-            object-position: center;
+            width: 100%;            /* Asegura que ocupe todo el ancho del contenedor */
+            height: 200px;          /* Altura fija para uniformidad */
+            object-fit: cover;      /* Recorta la imagen para llenar el espacio sin deformarse */
+            object-position: center; /* Centra la parte visible de la imagen recortada */
         }
     </style>
 </head>
@@ -124,9 +110,9 @@ if ($searchTerm) {
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <form class="d-flex" role="search" method="GET">
-        <input class="form-control me-2" type="search" name="search" placeholder="Buscar" aria-label="Buscar">
-        <button class="btn btn-outline-success" type="submit">Buscar</button>
+      <form class="d-flex" role="search">
+        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+        <button class="btn btn-outline-success" type="submit">Search</button>
       </form>
       <ul class="navbar-nav ms-auto">
     <li class="nav-item dropdown">
@@ -193,4 +179,7 @@ if ($searchTerm) {
         
     </div>
 
-    <!-- Bootstrap JS[_{{{CITATION{{{_1{](https://github.com/samir04m/VotacionesUnimagWeb2018/tree/068daee4db1ec8bf1c791fd3d4bb4fba28af7862/view%2FnoFound.php)[_{{{CITATION{{{_2{](https://github.com/samir04m/SistemaVotacionWeb2018_NoDB/tree/075ab38aafabc453bdfafc1b5e9ca54354cb54d9/views%2Ftemplate.php)[_{{{CITATION{{{_3{](https://github.com/Amankori2307/ELearning/tree/80fd4adecd1f3f91288274549f2f3d67303def96/Admin%2FadminIncludes%2Fheader.php)[_{{{CITATION{{{_4{](https://github.com/Dhruv-Kharkwal/academic_records_management_system/tree/efac4221d8a65dcd7860e126f952cc946be78049/dashboard_home.php)[_{{{CITATION{{{_5{](https://github.com/nghialeminhbk/ATTT_license_key/tree/a0ca5a4245a44ec940c6d82dd5ba5e05913f1534/app%2Findex.php)[_{{{CITATION{{{_6{](https://github.com/adewalecharles/colnect_test/tree/3a6277cb13d61a8b70a3ff0faefea49cb5cfd952/index.php)[_{{{CITATION{{{_7{](https://github.com/muhammadnassuha/dompetdonasi/tree/8eea83b795f2efb9800528ea0d75534a401acdfd/login_user%2Fall_campaign_user%2Findex.php)[_{{{CITATION{{{_8{](https://github.com/deysihernandez/webscone1/tree/4a180d8c2aef98901d8aa3866602b214d0e445c5/resources%2Fviews%2Fadmin%2Fprimerosoftware%2Fsoftware.blade.php)[_{{{CITATION{{{_9{](https://github.com/arightruckuss/Company-Director/tree/f55fa920416fbc7fdc64dca46b09d264fc2b6faa/Company_Directory%2Findex.php)
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
