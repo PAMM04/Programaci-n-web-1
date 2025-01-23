@@ -3,7 +3,7 @@ session_start();
 require_once "conexion.php";
 
 // Verificar si el usuario está autenticado
-if (!isset($_SESSION['idusuario'])) {
+if (!isset($_SESSION['id_usuario'])) {
     header('Location: login.html');
     exit;
 }
@@ -15,7 +15,7 @@ if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
 }
 
 $idnoticia = intval($_GET['id']);
-$idusuario = $_SESSION['idusuario'];
+$idusuario = $_SESSION['id_usuario'];
 $esAdministrador = isset($_SESSION['rol_id']) && $_SESSION['rol_id'] === 1; // Verificar si el usuario es administrador
 
 // Procesar eliminación de comentario
@@ -40,7 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['comentario']) && !iss
     $comentarioPadre = isset($_POST['comentario_padre']) ? intval($_POST['comentario_padre']) : null;
 
     if (!empty($comentario)) {
-        $queryComentario = "INSERT INTO comentarios (idnoticia, idusuario, contenido, estado, fecha, idcomentario_padre) 
+        $queryComentario = "INSERT INTO comentarios (id_noticia, id_usuario, contenido, estado, fecha, id_comentario_padre) 
                             VALUES (?, ?, ?, 'pendiente', NOW(), ?)";
         $stmtComentario = $conexion->prepare($queryComentario);
 
@@ -58,10 +58,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['comentario']) && !iss
 }
 
 // Obtener los detalles de la noticia
-$queryNoticia = "SELECT n.titulo, n.contenido, n.imagen_ruta, n.fecha_creacion, c.nombre AS categoria 
+$queryNoticia = "SELECT n.titulo, n.contenido, n.imagen, n.fecha_creacion, c.nombre AS categoria 
                  FROM noticias n
-                 LEFT JOIN categorias c ON n.categoria_id = c.idcategoria
-                 WHERE n.idnoticia = ?";
+                 LEFT JOIN categoria c ON n.categoria_id = c.id_categoria
+                 WHERE n.id_noticias = ?";
 $stmtNoticia = $conexion->prepare($queryNoticia);
 
 if (!$stmtNoticia) {
@@ -80,9 +80,9 @@ if ($resultNoticia->num_rows === 0) {
 $noticia = $resultNoticia->fetch_assoc();
 
 // Obtener noticias relacionadas
-$queryRelacionadas = "SELECT idnoticia, titulo, SUBSTRING(contenido, 1, 100) AS resumen, imagen_ruta 
+$queryRelacionadas = "SELECT id_noticias, titulo, SUBSTRING(contenido, 1, 100) AS resumen, imagen
                       FROM noticias 
-                      WHERE idnoticia != ? 
+                      WHERE id_noticias != ? 
                       ORDER BY RAND() LIMIT 3";
 $stmtRelacionadas = $conexion->prepare($queryRelacionadas);
 
@@ -96,11 +96,11 @@ $resultRelacionadas = $stmtRelacionadas->get_result();
 
 
 // Obtener comentarios aprobados (y sus respuestas)
-$queryComentarios = "SELECT c.idcomentario, c.contenido, c.fecha, c.idcomentario_padre, u.nombre AS autor 
+$queryComentarios = "SELECT c.id_comentario, c.contenido, c.fecha_comen, c.id_comentario_padre, u.nombre AS autor 
                      FROM comentarios c
-                     JOIN usuarios u ON c.idusuario = u.idusuario
-                     WHERE c.idnoticia = ? AND c.estado = 'aprobado'
-                     ORDER BY c.idcomentario_padre ASC, c.fecha ASC";
+                     JOIN usuario u ON c.id_usuario = u.id_usuario
+                     WHERE c.id_noticia = ? AND c.estado = 'aprobado'
+                     ORDER BY c.id_comentario_padre ASC, c.fecha_comen ASC";
 $stmtComentarios = $conexion->prepare($queryComentarios);
 
 if (!$stmtComentarios) {
@@ -172,8 +172,8 @@ while ($comentario = $resultComentarios->fetch_assoc()) {
         <h1><?php echo htmlspecialchars($noticia['titulo']); ?></h1>
         <p class="text-muted">Publicado el: <?php echo $noticia['fecha_creacion']; ?></p>
         
-        <?php if ($noticia['imagen_ruta']): ?>
-            <img src="<?php echo htmlspecialchars($noticia['imagen_ruta']); ?>" class="imagen-noticia" alt="Imagen de la noticia">
+        <?php if ($noticia['imagen']): ?>
+            <img src="<?php echo htmlspecialchars($noticia['imagen']); ?>" class="imagen-noticia" alt="Imagen de la noticia">
         <?php endif; ?>
         
         <p><?php echo nl2br(htmlspecialchars($noticia['contenido'])); ?></p>
@@ -236,13 +236,13 @@ while ($comentario = $resultComentarios->fetch_assoc()) {
             <?php while ($relacionada = $resultRelacionadas->fetch_assoc()): ?>
             <div class="col-md-4 mb-3">
                 <div class="card bg-secondary text-light h-100">
-                    <?php if ($relacionada['imagen_ruta']): ?>
-                        <img src="<?php echo htmlspecialchars($relacionada['imagen_ruta']); ?>" class="imagen-relacionada" alt="Imagen de la noticia relacionada">
+                    <?php if ($relacionada['imagen']): ?>
+                        <img src="<?php echo htmlspecialchars($relacionada['imagen']); ?>" class="imagen-relacionada" alt="Imagen de la noticia relacionada">
                     <?php endif; ?>
                     <div class="card-body">
                         <h5 class="card-title"><?php echo htmlspecialchars($relacionada['titulo']); ?></h5>
                         <p class="card-text"><?php echo htmlspecialchars($relacionada['resumen']); ?>...</p>
-                        <a href="ver_noticia.php?id=<?php echo $relacionada['idnoticia']; ?>" class="btn btn-primary">Leer más</a>
+                        <a href="ver_noticia.php?id=<?php echo $relacionada['id_noticias']; ?>" class="btn btn-primary">Leer más</a>
                     </div>
                 </div>
             </div>
