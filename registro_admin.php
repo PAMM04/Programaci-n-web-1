@@ -1,43 +1,34 @@
 <?php
-require_once "conexion.php"; // Archivo con la conexión a la base de datos
+session_start();
+require_once "conexion.php";
 
-// Verificar si los datos han sido enviados
-if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    $nombres = trim($_POST["nombre"]);
-    $email = trim($_POST["email"]);
-    $password = trim($_POST["password"]);
-    $rol_id = intval($_POST["rol_id"]); // Convertir a número
+// Verificar si el usuario está autenticado y es administrador
+if (!isset($_SESSION['id_usuario']) || $_SESSION['rol_id'] != 1) {
+    header('Location: login.php');
+    exit;
+}
 
-    // Validar campos obligatorios
-    if (!empty($nombres) && !empty($email) && !empty($password) && $rol_id > 0) {
-        // Verificar si el usuario ya está registrado
-        $query = "SELECT * FROM usuarios WHERE email = ?";
-        $stmt = $conexion->prepare($query);
-        $stmt->bind_param("s", $email);
-        $stmt->execute();
-        $result = $stmt->get_result();
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $nombre = $_POST['nombre'];
+    $email = $_POST['email'];
+    $password = password_hash($_POST['password'], PASSWORD_BCRYPT);
+    $genero = $_POST['genero'];
+    $direccion = $_POST['direccion'];
+    $nacionalidad = $_POST['nacionalidad'];
+    $num_telefono = $_POST['num_telefono'];
+    $fecha_nacimiento = $_POST['fecha_nacimiento'];
+    $rol_id = $_POST['rol_id'];
 
-        if ($result->num_rows > 0) {
-            echo "<script>alert('El usuario ya está registrado. Por favor, inicia sesión.');</script>";
-            
-        } else {
-            // Hash de la contraseña
-            $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+    // Insertar el nuevo usuario en la base de datos
+    $query = "INSERT INTO usuario (nombre, email, password, genero, direccion, nacionalidad, num_telefono, fecha_nacimiento, rol_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    $stmt = $conexion->prepare($query);
+    $stmt->bind_param("ssssssssi", $nombre, $email, $password, $genero, $direccion, $nacionalidad, $num_telefono, $fecha_nacimiento, $rol_id);
 
-            // Insertar nuevo usuario
-            $insert_query = "INSERT INTO usuarios (nombre, email, password, rol_id) VALUES (?, ?, ?, ?)";
-            $stmt = $conexion->prepare($insert_query);
-            $stmt->bind_param("ssss", $nombres, $email, $hashed_password, $rol_id);
-
-            if ($stmt->execute()) {
-                echo "<script>alert('Usuario registrado correctamente. Por favor, inicia sesión.');</script>";
-                
-            } else {
-                echo "<script>alert('Error al registrar el usuario: " . $stmt->error . "');</script>";
-            }
-        }
+    if ($stmt->execute()) {
+        header('Location: manage_users.php');
+        exit;
     } else {
-        echo "<script>alert('Por favor, completa todos los campos correctamente.');</script>";
+        echo "Error: " . $stmt->error;
     }
 }
 ?>
