@@ -141,7 +141,7 @@ while ($comentario = $resultComentarios->fetch_assoc()) {
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+    <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
         <div class="container-fluid">
             <a class="navbar-brand" href="dashboard.php">Mi Sitio</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
@@ -157,8 +157,11 @@ while ($comentario = $resultComentarios->fetch_assoc()) {
     </nav>
 
     <div class="container mt-5">
-        <h1 class="text-center"><?php echo htmlspecialchars($noticia['titulo']); ?></h1>
-        <p class="text-muted text-center">Publicado el: <?php echo htmlspecialchars($noticia['fecha_creacion']); ?></p>
+        <div class="d-flex justify-content-between">
+            <h1 class="text-left"><?php echo htmlspecialchars($noticia['titulo']); ?></h1>
+            <p class="text-right">Publicado el: <?php echo htmlspecialchars($noticia['fecha_creacion']); ?></p>
+        </div>
+
 
         <?php if ($noticia['imagen']): ?>
             <img src="<?php echo htmlspecialchars($noticia['imagen']); ?>" class="imagen-noticia" alt="Imagen de la noticia">
