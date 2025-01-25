@@ -13,7 +13,7 @@ if (!isset($_SESSION['id_usuario'])) {
 } else {
     $idusuario = $_SESSION['id_usuario'];
 
-    $queryUsuario = "SELECT nombre, email, rol_id FROM usuario WHERE id_usuario = ?";
+    $queryUsuario = "SELECT nombre, email, rol_id, perfil FROM usuario WHERE id_usuario = ?";
     $stmtUsuario = $conexion->prepare($queryUsuario);
     $stmtUsuario->bind_param("i", $idusuario);
     $stmtUsuario->execute();
@@ -126,8 +126,10 @@ if ($categoriaSeleccionada) {
                 <button class="btn btn-primary" type="submit">Buscar</button>
             </form>
             <ul class="navbar-nav ms-3">
+                
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown">
+                        <img src="upload_perfil/<?= htmlspecialchars($usuario['perfil'] ?? 'default.png'); ?>" alt="Perfil" class="perfil-circulo me-2">
                         <?php echo htmlspecialchars($usuario['nombre']); ?>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end" style="right: 0; left: auto;">
@@ -137,6 +139,8 @@ if ($categoriaSeleccionada) {
                         <?php if ($puedeGestionarUsuarios): ?>
                             <li><a class="dropdown-item" href="manage_users.php">Gestionar Usuarios</a></li>
                         <?php endif; ?>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="editar_perfil.php">Perfil</a></li>
                         <?php if (!isset($_SESSION['id_usuario'])): ?>
                             <li><a class="dropdown-item" href="login.html">Iniciar sesión</a></li>
                         <?php else: ?>

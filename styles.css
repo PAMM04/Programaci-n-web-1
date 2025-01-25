@@ -106,7 +106,7 @@ footer p {
 .imagen-noticia {
     width: 100%;
     height: 600px;
-    object-fit: contain;
+    object-fit: cover;
     object-position: center;
     display: block;
     margin: 0 auto;
@@ -138,3 +138,22 @@ footer p {
     border: none;
 }
 
+
+
+
+
+.perfil {
+    display: block;
+    margin: 1rem auto 0;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.perfil-circulo {
+    width: 40px; /* Ajusta el tamaño del círculo */
+    height: 40px;
+    border-radius: 50%; /* Hace que la imagen sea redonda */
+    object-fit: cover; /* Asegura que la imagen se recorte y ajuste dentro del círculo */
+    border: 2px solid #fff; /* Opcional: agrega un borde blanco alrededor */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Opcional: añade una sombra */
+}
