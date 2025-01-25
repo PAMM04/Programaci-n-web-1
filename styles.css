@@ -106,7 +106,7 @@ footer p {
 .imagen-noticia {
     width: 100%;
     height: 600px;
-    object-fit: cover;
+    object-fit: contain;
     object-position: center;
     display: block;
     margin: 0 auto;

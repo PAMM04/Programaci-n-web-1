@@ -27,6 +27,7 @@ if (!isset($_SESSION['id_usuario'])) {
     ];
 }
 
+// Obtener los permisos del usuario
 $queryPermisos = "
     SELECT p.nombre 
     FROM permisos p
@@ -46,6 +47,7 @@ $puedeVerDashboard = in_array('ver_dashboard', $permisos);
 $puedeGestionarUsuarios = in_array('gestionar_usuarios', $permisos);
 $puedeCrearNoticia = in_array('crear_noticia', $permisos);
 
+// Obtener las últimas noticias
 $searchTerm = isset($_GET['search']) ? $_GET['search'] : '';
 if ($searchTerm) {
     $queryNoticias = "SELECT id_noticias, titulo, SUBSTRING(contenido, 1, 100) AS resumen, imagen, fecha_creacion
@@ -60,10 +62,9 @@ if ($searchTerm) {
 } else {
     $queryNoticias = "SELECT id_noticias, titulo, SUBSTRING(contenido, 1, 100) AS resumen, imagen, fecha_creacion
                       FROM noticias 
-                      ORDER BY fecha_creacion DESC";
+                      ORDER BY fecha_creacion DESC LIMIT 6";
     $resultNoticias = $conexion->query($queryNoticias);
 }
-
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -77,11 +78,31 @@ if ($searchTerm) {
 <body>
 <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
     <div class="container-fluid">
-        <a class="navbar-brand" href="#">Dashboard</a>
+        <a class="navbar-brand" href="#">INICIO</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link" href="deportes.php">DEPORTES</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="investigacion.php">INVESTIGACIÓN</a>
+                </li>
+                <li class="nav-item">
+                <a class="nav-link" href="internacionalizacion.php">INTERNACIONALIZACIÓN</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="convenios.php">CONVENIOS</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="comunidad.php">COMUNIDAD</a>        
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="contacto.php">CONTACTO</a>        
+                </li>
+            </ul>
             <form class="d-flex ms-auto" role="search" method="GET">
                 <input class="form-control me-2" type="search" name="search" placeholder="Buscar" aria-label="Buscar">
                 <button class="btn btn-primary" type="submit">Buscar</button>
@@ -109,10 +130,11 @@ if ($searchTerm) {
         </div>
     </div>
 </nav>
+
 <div class="container mt-4">
     <?php if ($puedeVerDashboard): ?>
         <div class="highlight-section">
-            <h2 class="mb-3">Noticias</h2>
+            <h2 class="mb-3">&iexcl;Últimas Noticias!</h2>
             <div class="row">
                 <?php while ($noticia = $resultNoticias->fetch_assoc()): ?>
                     <div class="col-md-4 mb-4">

@@ -19,7 +19,6 @@ $resultUsuario = $stmtUsuario->get_result();
 if ($resultUsuario->num_rows > 0) {
     $usuario = $resultUsuario->fetch_assoc();
 } else {
-    // En caso de no encontrar al usuario
     header('Location: login.php');
     exit;
 }
@@ -103,6 +102,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -110,39 +110,55 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Subir Noticia</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
-<style>
-     body {
-            background-color:rgb(201, 201, 201);
+    <style>
+        body {
+            background-color: rgb(201, 201, 201);
         }
-
-</style>
+        .container {
+            margin-top: 30px;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container-fluid">
         <a class="navbar-brand" href="dashboard.php">Dashboard</a>
-        <ul class="navbar-nav ms-auto">
-            <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    <?php echo htmlspecialchars($usuario['nombre']); ?>
-                </a>
-                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-                    <li><a class="dropdown-item" href="logout.php">Cerrar sesión</a></li>
-                </ul>
-            </li>
-        </ul>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <?php echo htmlspecialchars($usuario['nombre']); ?>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                        <li><a class="dropdown-item" href="logout.php">Cerrar sesión</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
     </div>
 </nav>
-<div class="container mt-5">
+
+<div class="container">
     <h1>Subir Nueva Noticia</h1>
-    <form method="POST" action="subir_noticia.php" enctype="multipart/form-data">
+    <form method="POST" action="" enctype="multipart/form-data">
         <div class="mb-3">
             <label for="titulo" class="form-label">Título</label>
-            <input type="text" class="form-control" id="titulo" name="titulo" required>
+            <input type="text" class="form-control" id="titulo" name="titulo" placeholder="Escribe el título de la noticia" required>
         </div>
         <div class="mb-3">
             <label for="contenido" class="form-label">Contenido</label>
-            <textarea class="form-control" id="contenido" name="contenido" rows="5" required></textarea>
+            <textarea class="form-control" id="contenido" name="contenido" rows="5" placeholder="Escribe el contenido de la noticia" required></textarea>
         </div>
         <div class="mb-3">
             <label for="categoria_id" class="form-label">Categoría</label>
@@ -157,16 +173,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         </div>
         <div class="mb-3">
             <label for="imagen" class="form-label">Imagen (obligatoria)</label>
-            <input type="file" class="form-control" id="imagen" name="imagen" required>
+            <input type="file" class="form-control" id="imagen" name="imagen" accept="image/*" required>
         </div>
         <div class="form-check mb-3">
             <input class="form-check-input" type="checkbox" id="destacado" name="destacado">
             <label class="form-check-label" for="destacado">Destacar esta noticia</label>
         </div>
-        <button type="submit" class="btn btn-primary">Subir Noticia</button>
-        <a href="lista_noticias.php" class="btn btn-secondary">Cancelar</a>
+        <div class="text-center">
+            <button type="submit" class="btn btn-primary">Subir Noticia</button>
+            <a href="manage_users.php" class="btn btn-secondary">Cancelar</a>
+        </div>
     </form>
 </div>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
