@@ -101,9 +101,8 @@ $resultNoticias = $conexion->query($queryNoticias);
 </head>
 <body>
     <div class="container mt-5">
-        <h1 class="mb-4">Gestión de Usuarios y Noticias</h1>
+        <h1 class="mb-4">Gestión de Usuarios</h1>
         <a href="registro_admin.html" class="btn_crear">Crear Nuevo Usuario</a>
-        <a href="subir_noticia.php" class="btn_crear">Crear Nueva Noticia</a>
         <a href="dashboard.php" class="btn_dashboard">Volver</a>
         
         <h2 class="mt-5">Usuarios</h2>
@@ -127,33 +126,6 @@ $resultNoticias = $conexion->query($queryNoticias);
                     <td>
                         <a href="editar_usuario.php?id=<?php echo $row['id_usuario']; ?>" class="btn btn-warning btn-sm">Editar</a>
                         <a href="eliminar_usuario.php?id=<?php echo $row['id_usuario']; ?>" class="btn btn-danger btn-sm" onclick="return confirm('¿Estás seguro de eliminar este usuario?');">Eliminar</a>
-                    </td>
-                </tr>
-                <?php endwhile; ?>
-            </tbody>
-        </table>
-
-        <h2 class="mt-5">Noticias</h2>
-        <table class="table table-dark table-hover">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Título</th>
-                    <th>Resumen</th>
-                    <th>Fecha de Creación</th>
-                    <th>Acciones</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php while ($row = $resultNoticias->fetch_assoc()): ?>
-                <tr>
-                    <td><?php echo $row['id_noticias']; ?></td>
-                    <td><?php echo htmlspecialchars($row['titulo']); ?></td>
-                    <td><?php echo htmlspecialchars($row['resumen']); ?>...</td>
-                    <td><?php echo htmlspecialchars($row['fecha_creacion']); ?></td>
-                    <td>
-                        <a href="editar_noticia.php?id=<?php echo $row['id_noticias']; ?>" class="btn btn-warning btn-sm">Editar</a>
-                        <a href="eliminar_noticia.php?id=<?php echo $row['id_noticias']; ?>" class="btn btn-danger btn-sm" onclick="return confirm('¿Estás seguro de eliminar esta noticia?');">Eliminar</a>
                     </td>
                 </tr>
                 <?php endwhile; ?>

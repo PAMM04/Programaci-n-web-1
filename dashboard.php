@@ -126,7 +126,36 @@ if ($categoriaSeleccionada) {
                 <button class="btn btn-primary" type="submit">Buscar</button>
             </form>
             <ul class="navbar-nav ms-3">
-                
+                <!-- Menú Gestión -->
+                <?php if ($puedeGestionarUsuarios || $puedeCrearNoticia): ?>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="gestionDropdown" role="button" data-bs-toggle="dropdown">
+                            Gestión
+                        </a>
+                        <ul class="dropdown-menu">
+                            <?php if ($puedeGestionarUsuarios): ?>
+                                <li><a class="dropdown-item" href="manage_users.php">Usuarios</a></li>
+                            <?php endif; ?>
+                            <?php if ($puedeCrearNoticia): ?>
+                                <li><a class="dropdown-item" href="lista_noticias.php">Noticias</a></li>
+                            <?php endif; ?>
+                            <?php if ($puedeGestionarUsuarios): ?>
+                                <li><a class="dropdown-item" href="manage_users.php">Comentarios</a></li>
+                            <?php endif; ?>
+                            <?php if ($puedeGestionarUsuarios): ?>
+                                <li><a class="dropdown-item" href="manage_users.php">Reportes</a></li>
+                            <?php endif; ?>
+                            <?php if ($puedeGestionarUsuarios): ?>
+                                <li><a class="dropdown-item" href="manage_users.php">Mensajes y Notificaciones</a></li>
+                            <?php endif; ?>
+                            <?php if ($puedeGestionarUsuarios): ?>
+                                <li><a class="dropdown-item" href="manage_users.php">Configuraciones</a></li>
+                            <?php endif; ?>
+                        </ul>
+                    </li>
+                <?php endif; ?>
+
+                <!-- Menú de Usuario -->
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown">
                         <img src="upload_perfil/<?= htmlspecialchars($usuario['perfil'] ?? 'default.png'); ?>" alt="Perfil" class="perfil-circulo me-2">
@@ -136,9 +165,6 @@ if ($categoriaSeleccionada) {
                         <li><h6 class="dropdown-header">Bienvenido, <?php echo htmlspecialchars($usuario['nombre']); ?></h6></li>
                         <li><span class="dropdown-item-text"><strong>Email:</strong> <?php echo htmlspecialchars($usuario['email']); ?></span></li>
                         <li><hr class="dropdown-divider"></li>
-                        <?php if ($puedeGestionarUsuarios): ?>
-                            <li><a class="dropdown-item" href="manage_users.php">Gestionar Usuarios</a></li>
-                        <?php endif; ?>
                         <li><hr class="dropdown-divider"></li>
                         <li><a class="dropdown-item" href="editar_perfil.php">Perfil</a></li>
                         <?php if (!isset($_SESSION['id_usuario'])): ?>
@@ -152,6 +178,7 @@ if ($categoriaSeleccionada) {
         </div>
     </div>
 </nav>
+
 
 <ul class="nav nav-tabs">
     <li class="nav-item">
