@@ -163,8 +163,8 @@
                 <div class="contact-details">
                     <p><strong>Dirección:</strong> Av. Beni y Tercer Anillo Externo</p>
                     <p><strong>Teléfono:</strong> (591) 3 342 - 6600</p>
-                    <p><strong>WhatsApp:</strong> (591) 721-29166</p>
-                    <p><strong>Email:</strong> info@upds.edu.bo</p>
+                    <p><strong>WhatsApp:</strong> (591) 658-84086</p>
+                    <p><strong>Email:</strong><a href="mailto:infoupds.santacruz@upds.edu.bo">infoupds.santacruz@upds.edu.bo</a></p>
                     <p><a href="https://facebook.com/UPDS.bo" target="_blank">Facebook Oficial</a></p>
                 </div>
 
