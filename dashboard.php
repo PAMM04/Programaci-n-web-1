@@ -194,7 +194,7 @@ if ($categoriaSeleccionada) {
             </a>
         </li>
     <?php endwhile; ?>
-    <a class="nav-link" href="contacto.php">contacto</a>
+    <a class="nav-link" href="contacto.php">Contacto</a>
 </ul>
 
 
