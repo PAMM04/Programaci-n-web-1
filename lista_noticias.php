@@ -5,7 +5,7 @@ require_once "conexion.php";
 // Verificar si el usuario está autenticado
 if (!isset($_SESSION['id_usuario'])) {
     // Redirigir al inicio de sesión si no está autenticado
-    header('Location: login.html');
+    header('Location: login.php');
     exit;
 }
 
@@ -66,40 +66,58 @@ $result = $conexion->query($query);
             color: #fff;
         }
         .btn-primary {
-            background-color: #007bff;
+            font-weight: bold;
+            background-color:#212529; /* Color verde */
+            color: white;
+            font-size: 16px;
+            padding: 12px 24px;
             border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none; /* Eliminar subrayado si se coloca en un enlace */
+            transition: background-color 0.3s ease;
+            margin-top: 20px; /* Espacio por encima del botón */
+        }
+
+        .btn-primary:hover {
+            background-color:rgb(90, 90, 90); /* Verde más oscuro al pasar el cursor */
+        }
+
+        .btn_dashboard {
+            font-weight: bold;
+            background-color: #fc4a61; /* Color rojo sandía */
+            color: white;
+            font-size: 16px;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none; /* Eliminar subrayado si se coloca en un enlace */
+            transition: background-color 0.3s ease;
+            margin-top: 20px; /* Espacio por encima del botón */
+        }
+
+        .btn_dashboard:hover {
+            background-color: #f82e47; /* Rojo más oscuro al pasar el cursor */
+        }
+
+        /* Alineación centrada del botón */
+        .btn-container {
+            display: flex;
+            margin: 25px;
+            margin-top: 30px; /* Espacio entre formulario y botón */
         }
     </style>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="dashboard.php">Dashboard</a>
-            <div class="collapse navbar-collapse">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item">
-                        <a class="nav-link" href="logout.php">Cerrar sesión</a>
-                    </li>
-                </ul>
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <?php echo htmlspecialchars($usuario['nombre']); ?>
-                        </a>
-                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-                            <li><span class="dropdown-item-text"><strong>Email:</strong> <?php echo htmlspecialchars($usuario['email']); ?></span></li>
-                            <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item" href="logout.php">Cerrar sesión</a></li>
-                        </ul>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
 
     <div class="container mt-5">
         <h1>Noticias</h1>
-        <a href="subir_noticia.php" class="btn btn-success mb-3">Nueva Noticia</a>
+        <a href="subir_noticia.php" class="btn-primary">Nueva Noticia</a>
+        <a href="dashboard.php" class="btn_dashboard">Volver</a>
+        <h2>.</h2>
         <table class="table table-dark table-hover">
             <thead>
                 <tr>

@@ -24,7 +24,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
         if ($result->num_rows > 0) {
             echo "<script>alert('El usuario ya está registrado. Por favor, inicia sesión.');</script>";
-            echo "<script>window.location.href = 'login.html';</script>";
+            echo "<script>window.location.href = 'login.php';</script>";
             exit;
         } else {
             // Hash de la contraseña
@@ -37,7 +37,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
             if ($stmt->execute()) {
                 echo "<script>alert('Usuario registrado correctamente. Por favor, inicia sesión.');</script>";
-                echo "<script>window.location.href = 'login.html';</script>";
+                echo "<script>window.location.href = 'login.php';</script>";
                 exit;
             } else {
                 echo "<script>alert('Error al registrar el usuario: " . $stmt->error . "');</script>";

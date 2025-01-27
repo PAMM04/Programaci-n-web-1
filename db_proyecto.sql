@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 25-01-2025 a las 16:16:56
+-- Tiempo de generación: 27-01-2025 a las 03:54:34
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -20,6 +20,45 @@ SET time_zone = "+00:00";
 --
 -- Base de datos: `db_proyecto`
 --
+
+DELIMITER $$
+--
+-- Procedimientos
+--
+CREATE DEFINER=`root`@`localhost` PROCEDURE `ActivarUsuariosSuspendidos` ()   BEGIN
+    -- Variables locales
+    DECLARE fecha_actual DATETIME;
+
+    -- Obtener la fecha actual
+    SET fecha_actual = NOW();
+
+    -- Mover suspensiones que han cumplido 7 días a la tabla registros
+    INSERT INTO registros (id_usuario, fecha_suspension, fecha_activacion, motivo)
+    SELECT 
+        s.id_usuario,
+        s.fecha_suspension,
+        fecha_actual,
+        s.motivo
+    FROM 
+        suspenciones s
+    WHERE 
+        TIMESTAMPDIFF(DAY, s.fecha_suspension, fecha_actual) >= 7;
+
+    -- Activar a los usuarios suspendidos cuyos registros han sido movidos
+    UPDATE usuario 
+    SET estado = 'activo'
+    WHERE id_usuario IN (
+        SELECT id_usuario 
+        FROM suspenciones 
+        WHERE TIMESTAMPDIFF(DAY, fecha_suspension, fecha_actual) >= 7
+    );
+
+    -- Eliminar las suspensiones procesadas de la tabla suspenciones
+    DELETE FROM suspenciones 
+    WHERE TIMESTAMPDIFF(DAY, fecha_suspension, fecha_actual) >= 7;
+END$$
+
+DELIMITER ;
 
 -- --------------------------------------------------------
 
@@ -112,6 +151,20 @@ INSERT INTO `permisos` (`id_permisos`, `nombre`, `descripcion`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `registros`
+--
+
+CREATE TABLE `registros` (
+  `id_registro` int(11) NOT NULL,
+  `id_usuario` int(11) NOT NULL,
+  `fecha_suspension` datetime NOT NULL,
+  `fecha_activacion` datetime NOT NULL,
+  `motivo` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `roles`
 --
 
@@ -155,6 +208,26 @@ INSERT INTO `roles_permisos` (`id_rol`, `id_permisos`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `suspenciones`
+--
+
+CREATE TABLE `suspenciones` (
+  `id_suspension` int(11) NOT NULL,
+  `id_usuario` int(11) NOT NULL,
+  `fecha_suspension` datetime NOT NULL,
+  `motivo` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `suspenciones`
+--
+
+INSERT INTO `suspenciones` (`id_suspension`, `id_usuario`, `fecha_suspension`, `motivo`) VALUES
+(2, 1, '2025-01-26 22:47:49', 'Por gey');
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `usuario`
 --
 
@@ -169,6 +242,7 @@ CREATE TABLE `usuario` (
   `num_telefono` varchar(15) DEFAULT NULL,
   `fecha_nacimiento` date DEFAULT NULL,
   `perfil` varchar(255) NOT NULL,
+  `estado` enum('activo','inactivo','suspendido') NOT NULL,
   `rol_id` int(11) DEFAULT NULL,
   `fecha_registro` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -177,11 +251,11 @@ CREATE TABLE `usuario` (
 -- Volcado de datos para la tabla `usuario`
 --
 
-INSERT INTO `usuario` (`id_usuario`, `nombre`, `email`, `password`, `genero`, `direccion`, `nacionalidad`, `num_telefono`, `fecha_nacimiento`, `perfil`, `rol_id`, `fecha_registro`) VALUES
-(1, 'Usuario', 'j29s09c03@gmail.com', '$2y$10$95XTctCsLsSKDPhsy/f1Rem6doJsJTcZKVQO2HmMrwSQFcgYH4Kqy', 'M', 'no', 'Bolivia', '1234567891', '2003-09-29', '', 2, '2025-01-16 14:21:58'),
-(2, 'Administrador', 'jonathanscm290903@gmail.com', '$2y$10$95XTctCsLsSKDPhsy/f1Rem6doJsJTcZKVQO2HmMrwSQFcgYH4Kqy', '', 'Mi casa', 'Bolivia', '1234567891', '2003-09-29', 'logo-universidad-privada-domingo-savio (1).png', 1, '2025-01-16 14:21:58'),
-(4, 'PruebaUsuario', 'user@gmail.com', '$2y$10$ler05ywxdzxSBsoVcXpzmOhX.ugIS9oYtxgpQIwGq3aH5VNti3ef6', '', 'Mi casa', 'Boliviano', '69160031', '2003-09-29', '', 2, '2025-01-23 13:04:21'),
-(5, 'Pedrito', 'pedro@gmail.com', '$2y$10$1OX6MUhUqZME5wqqA4wv0OFVSYNqNrUx/wQnHAaKfmH5hdiCmAKEq', '', 'Mi casa', 'Peruano', '69160034', '1236-12-12', '', 2, '2025-01-24 13:20:48');
+INSERT INTO `usuario` (`id_usuario`, `nombre`, `email`, `password`, `genero`, `direccion`, `nacionalidad`, `num_telefono`, `fecha_nacimiento`, `perfil`, `estado`, `rol_id`, `fecha_registro`) VALUES
+(1, 'Usuario', 'j29s09c03@gmail.com', '$2y$10$95XTctCsLsSKDPhsy/f1Rem6doJsJTcZKVQO2HmMrwSQFcgYH4Kqy', 'M', 'no', 'Bolivia', '1234567891', '2003-09-29', 'logo-universidad-privada-domingo-savio (1).png', 'suspendido', 2, '2025-01-16 14:21:58'),
+(2, 'Jonathan', 'jonathanscm290903@gmail.com', '$2y$10$95XTctCsLsSKDPhsy/f1Rem6doJsJTcZKVQO2HmMrwSQFcgYH4Kqy', '', 'Mi Casa', 'Bolivia', '69160031', '2003-09-29', 'Imagen de WhatsApp 2025-01-09 a las 21.18.33_64725603.jpg', 'activo', 1, '2025-01-16 14:21:58'),
+(4, 'PruebaUsuario', 'user@gmail.com', '$2y$10$ler05ywxdzxSBsoVcXpzmOhX.ugIS9oYtxgpQIwGq3aH5VNti3ef6', '', 'Mi casa', 'Boliviano', '69160031', '2003-09-29', 'Imagen de WhatsApp 2025-01-09 a las 21.24.49_eecbc436.jpg', 'activo', 2, '2025-01-23 13:04:21'),
+(5, 'Pedrito', 'pedro@gmail.com', '$2y$10$1OX6MUhUqZME5wqqA4wv0OFVSYNqNrUx/wQnHAaKfmH5hdiCmAKEq', '', 'Mi casa', 'Peruano', '69160034', '1236-12-12', '', 'activo', 2, '2025-01-24 13:20:48');
 
 --
 -- Índices para tablas volcadas
@@ -217,6 +291,13 @@ ALTER TABLE `permisos`
   ADD PRIMARY KEY (`id_permisos`);
 
 --
+-- Indices de la tabla `registros`
+--
+ALTER TABLE `registros`
+  ADD PRIMARY KEY (`id_registro`),
+  ADD KEY `id_usuario` (`id_usuario`);
+
+--
 -- Indices de la tabla `roles`
 --
 ALTER TABLE `roles`
@@ -228,6 +309,13 @@ ALTER TABLE `roles`
 ALTER TABLE `roles_permisos`
   ADD PRIMARY KEY (`id_rol`,`id_permisos`),
   ADD KEY `id_permisos` (`id_permisos`);
+
+--
+-- Indices de la tabla `suspenciones`
+--
+ALTER TABLE `suspenciones`
+  ADD PRIMARY KEY (`id_suspension`),
+  ADD KEY `id_usuario` (`id_usuario`);
 
 --
 -- Indices de la tabla `usuario`
@@ -266,10 +354,22 @@ ALTER TABLE `permisos`
   MODIFY `id_permisos` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
+-- AUTO_INCREMENT de la tabla `registros`
+--
+ALTER TABLE `registros`
+  MODIFY `id_registro` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT de la tabla `roles`
 --
 ALTER TABLE `roles`
   MODIFY `id_rol` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT de la tabla `suspenciones`
+--
+ALTER TABLE `suspenciones`
+  MODIFY `id_suspension` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de la tabla `usuario`
@@ -297,6 +397,12 @@ ALTER TABLE `noticias`
   ADD CONSTRAINT `noticias_ibfk_2` FOREIGN KEY (`id_usuario`) REFERENCES `usuario` (`id_usuario`) ON DELETE CASCADE;
 
 --
+-- Filtros para la tabla `registros`
+--
+ALTER TABLE `registros`
+  ADD CONSTRAINT `registros_ibfk_1` FOREIGN KEY (`id_usuario`) REFERENCES `usuario` (`id_usuario`);
+
+--
 -- Filtros para la tabla `roles_permisos`
 --
 ALTER TABLE `roles_permisos`
@@ -304,10 +410,26 @@ ALTER TABLE `roles_permisos`
   ADD CONSTRAINT `roles_permisos_ibfk_2` FOREIGN KEY (`id_permisos`) REFERENCES `permisos` (`id_permisos`) ON DELETE CASCADE;
 
 --
+-- Filtros para la tabla `suspenciones`
+--
+ALTER TABLE `suspenciones`
+  ADD CONSTRAINT `suspenciones_ibfk_1` FOREIGN KEY (`id_usuario`) REFERENCES `usuario` (`id_usuario`);
+
+--
 -- Filtros para la tabla `usuario`
 --
 ALTER TABLE `usuario`
   ADD CONSTRAINT `usuario_ibfk_1` FOREIGN KEY (`rol_id`) REFERENCES `roles` (`id_rol`) ON DELETE SET NULL;
+
+DELIMITER $$
+--
+-- Eventos
+--
+CREATE DEFINER=`root`@`localhost` EVENT `VerificarSuspensiones` ON SCHEDULE EVERY 1 DAY STARTS '2025-01-26 22:43:09' ON COMPLETION NOT PRESERVE ENABLE DO BEGIN
+    CALL ActivarUsuariosSuspendidos();
+END$$
+
+DELIMITER ;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

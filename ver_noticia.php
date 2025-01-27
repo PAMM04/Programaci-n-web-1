@@ -4,7 +4,7 @@ require_once "conexion.php";
 
 // Verificar si el usuario está autenticado
 if (!isset($_SESSION['id_usuario'])) {
-    header('Location: login.html');
+    header('Location: login.php');
     exit;
 }
 

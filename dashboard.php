@@ -78,7 +78,7 @@ $queryNoticias = "SELECT n.id_noticias, n.titulo, SUBSTRING(n.contenido, 1, 100)
 if ($categoriaSeleccionada) {
     $queryNoticias .= "WHERE n.categoria_id = ? ";
 }
-$queryNoticias .= "ORDER BY n.fecha_creacion DESC";
+$queryNoticias .= "ORDER BY n.fecha_creacion DESC LIMIT 6";
 
 $stmtNoticias = $conexion->prepare($queryNoticias);
 if ($categoriaSeleccionada) {
@@ -116,7 +116,7 @@ if ($categoriaSeleccionada) {
 <body>
 <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
     <div class="container-fluid">
-        <a class="navbar-brand" href="#">Dashboard</a>
+        <a class="navbar-brand" >Vortex News</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -158,18 +158,20 @@ if ($categoriaSeleccionada) {
                 <!-- Menú de Usuario -->
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown">
+                        <?php if (!isset($_SESSION['id_usuario'])): ?>
+                        <?php else: ?>
                         <img src="upload_perfil/<?= htmlspecialchars($usuario['perfil'] ?? 'default.png'); ?>" alt="Perfil" class="perfil-circulo me-2">
+                        <?php endif; ?>
                         <?php echo htmlspecialchars($usuario['nombre']); ?>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end" style="right: 0; left: auto;">
                         <li><h6 class="dropdown-header">Bienvenido, <?php echo htmlspecialchars($usuario['nombre']); ?></h6></li>
-                        <li><span class="dropdown-item-text"><strong>Email:</strong> <?php echo htmlspecialchars($usuario['email']); ?></span></li>
                         <li><hr class="dropdown-divider"></li>
                         <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="editar_perfil.php">Perfil</a></li>
                         <?php if (!isset($_SESSION['id_usuario'])): ?>
-                            <li><a class="dropdown-item" href="login.html">Iniciar sesión</a></li>
+                            <li><a class="dropdown-item" href="login.php">Iniciar sesión</a></li>
                         <?php else: ?>
+                            <li><a class="dropdown-item" href="editar_perfil.php">Perfil</a></li>
                             <li><a class="dropdown-item" href="logout.php">Cerrar sesión</a></li>
                         <?php endif; ?>
                     </ul>

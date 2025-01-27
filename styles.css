@@ -22,7 +22,8 @@ body {
     margin-right: 1rem;
 }
 
-.navbar-nav .nav-link:hover {
+.navbar-nav .nav-link:hover,
+.navbar-item {
     color: #fff;
 }
 
@@ -156,4 +157,24 @@ footer p {
     object-fit: cover; /* Asegura que la imagen se recorte y ajuste dentro del círculo */
     border: 2px solid #fff; /* Opcional: agrega un borde blanco alrededor */
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Opcional: añade una sombra */
+}
+
+
+.btn_rojo {
+    font-weight: bold;
+    background-color: #f82e47; /* Color rojo sandía */
+    color: white;
+    font-size: 16px;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none; /* Eliminar subrayado si se coloca en un enlace */
+    transition: background-color 0.3s ease;
+    margin-top: 20px; /* Espacio por encima del botón */
+}
+
+.btn_rojo:hover {
+    background-color: #fc4a61; /* Rojo más oscuro al pasar el cursor */
 }
