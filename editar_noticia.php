@@ -3,10 +3,11 @@ session_start();
 require_once "conexion.php";
 
 // Verificar si el usuario está autenticado y tiene permisos de administrador
-if (!isset($_SESSION['id_usuario']) || $_SESSION['rol_id'] != 1) {
+if (!isset($_SESSION['id_usuario']) || ($_SESSION['rol_id'] != 1 && $_SESSION['rol_id'] != 4)) {
     header('Location: login.php');
     exit;
 }
+
 
 // Verificar si se recibió un ID válido
 if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
