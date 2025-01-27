@@ -43,60 +43,110 @@ $resultNoticias = $conexion->query($queryNoticias);
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body {
-            background-color:rgb(201, 201, 201);
-            color: #fff;
-        }
-        .table-dark th, .table-dark td {
-            color: #fff;
-        }
-        .btn-primary, .btn-danger, .btn-warning {
-            border: none;
-        }
+    background-color: #f8f9fa; /* Blanco suave */
+    color:rgb(255, 255, 255); /* Gris oscuro para el texto */
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+}
 
-        .btn_dashboard {
-            font-weight: bold;
-            background-color: #fc4a61; /* Color rojo sandía */
-            color: white;
-            font-size: 16px;
-            padding: 12px 24px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            text-align: center;
-            text-decoration: none; /* Eliminar subrayado si se coloca en un enlace */
-            transition: background-color 0.3s ease;
-            margin-top: 20px; /* Espacio por encima del botón */
-        }
+h1 {
+    color: #212529; /* Negro intenso */
+    margin-bottom: 0px; /* Espacio debajo del título */
+    text-align: left;
+    
+    
+}
 
-        .btn_dashboard:hover {
-            background-color: #f82e47; /* Rojo más oscuro al pasar el cursor */
-        }
+.container {
+    max-width: 1200px; /* Limitar el ancho máximo del contenido */
+    margin: 0 auto; /* Centrar el contenido horizontalmente */
+    padding: 20px; /* Espaciado interno del contenedor */
+}
 
-        .btn_crear {
-            font-weight: bold;
-            background-color:#212529; /* Color verde */
-            color: white;
-            font-size: 16px;
-            padding: 12px 24px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            text-align: center;
-            text-decoration: none; /* Eliminar subrayado si se coloca en un enlace */
-            transition: background-color 0.3s ease;
-            margin-top: 20px; /* Espacio por encima del botón */
-        }
+.table {
+    background-color: #ffffff; /* Blanco puro para la tabla */
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-top: 20px; /* Espacio superior */
+}
 
-        .btn_crear:hover {
-            background-color:rgb(90, 90, 90); /* Verde más oscuro al pasar el cursor */
-        }
+.table th {
+    background-color: #007bff; /* Azul profesional */
+    color: #ffffff;
+    text-align: center;
+    padding: 15px; /* Añadir espaciado interno a las celdas del encabezado */
+}
 
-        /* Alineación centrada del botón */
-        .btn-container {
-            display: flex;
-            margin: 25px;
-            margin-top: 30px; /* Espacio entre formulario y botón */
-        }
+.table td {
+    text-align: center;
+    padding: 12px; /* Espaciado interno en las celdas */
+    vertical-align: middle; /* Centrar verticalmente el contenido */
+}
+
+.btn-primary,
+.btn_dashboard,
+.btn_crear {
+    display: inline-block;
+    font-weight: bold;
+    font-size: 16px;
+    padding: 10px 20px; /* Ajustar el tamaño de los botones */
+    border: none;
+    border-radius: 5px;
+    text-align: center;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+    margin: 10px 5px; /* Espaciado entre botones */
+}
+
+.btn-primary {
+    background-color: #007bff; /* Azul profesional */
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3; /* Azul más oscuro */
+}
+
+.btn_dashboard {
+    background-color: #6c757d; /* Gris profesional */
+    color: white;
+}
+
+.btn_dashboard:hover {
+    background-color: #5a6268; /* Gris más oscuro */
+}
+
+.btn_crear {
+    background-color: #007bff; /* Verde profesional */
+    color: white;
+}
+
+.btn_crear:hover {
+    background-color: #0056b3; /* Verde más oscuro */
+}
+
+.btn-container {
+    display: flex;
+    justify-content: space-between; /* Separar los botones */
+    align-items: center;
+    margin-top: 30px; /* Añadir espaciado superior */
+    margin-bottom: 20px; /* Añadir espaciado inferior */
+}
+
+table {
+    width: 100%; /* Ocupa todo el ancho del contenedor */
+}
+
+.table th,
+.table td {
+    border: 1px solid #dee2e6; /* Bordes ligeros */
+}
+
+.table-hover tbody tr:hover {
+    background-color: #f1f3f5; /* Color de fondo al pasar el cursor */
+}
+
     </style>
 </head>
 <body>
@@ -104,9 +154,7 @@ $resultNoticias = $conexion->query($queryNoticias);
         <h1 class="mb-4">Gestión de Usuarios</h1>
         <a href="registro_admin.html" class="btn_crear">Crear Nuevo Usuario</a>
         <a href="dashboard.php" class="btn_dashboard">Volver</a>
-        
-        <h2 class="mt-5">Usuarios</h2>
-        <table class="table table-dark table-hover">
+        <table class="table table table-hover">
             <thead>
                 <tr>
                     <th>ID</th>
