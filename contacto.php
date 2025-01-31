@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Contacto - UPDS</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+
+
     <style>
         /* Estilos generales */
         body {
@@ -145,10 +149,49 @@
                 height: 300px;
             }
         }
+
+        /* Contenedor del mapa */
+.map-container {
+    position: relative;
+    text-align: right; /* Alinear a la derecha */
+    width: 100%; /* Ocupa el ancho necesario */
+    max-width: 400px; /* Tamaño máximo del mapa */
+    margin: 20px auto; /* Espaciado superior e inferior, centrado horizontalmente */
+    cursor: pointer; /* Cambiar el cursor a "pointer" para indicar que es clicable */
+}
+
+/* Estilo del iframe o la imagen */
+.map-container iframe,
+.map-container img {
+    width: 100%; /* Ajusta al ancho del contenedor */
+    height: auto; /* Mantiene la proporción de aspecto */
+    border-radius: 12px; /* Bordes redondeados */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Sombra suave */
+    border: none; /* Sin bordes adicionales */
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Efecto de hover */
+}
+
+/* Hover para iframe o imagen */
+.map-container iframe:hover,
+.map-container img:hover {
+    transform: scale(1.05); /* Aumenta ligeramente el tamaño */
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.3); /* Incrementa la sombra */
+}
+
     </style>
 </head>
 <body>
-    <header>Contacto - Santa Cruz</header>
+<nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="dashboard.php">Vortex News</a>
+            <header>    - Contacto - Santa Cruz</header>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+            </div>
+        </div>
+    </nav>
 
     <div class="container">
         <!-- Sección de contacto -->
@@ -163,19 +206,19 @@
                 <div class="contact-details">
                     <p><strong>Dirección:</strong> Av. Beni y Tercer Anillo Externo</p>
                     <p><strong>Teléfono:</strong> (591) 3 342 - 6600</p>
-                    <p><strong>WhatsApp:</strong> (591) 658-84086</p>
+                    <p><strong>WhatsApp:</strong> 
+                    <a href="https://wa.me/59165884086" target="_blank" style="text-decoration: none; color: inherit;">(591) 658-84086</a></p>
+
                     <p><strong>Email:</strong><a href="mailto:infoupds.santacruz@upds.edu.bo">infoupds.santacruz@upds.edu.bo</a></p>
                     <p><a href="https://facebook.com/UPDS.bo" target="_blank">Facebook Oficial</a></p>
                 </div>
 
-                <!-- Mapa alineado a la derecha -->
-                <div class="map-container">
-                    <iframe 
-                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3827.905861716468!2d-63.17260152640067!3d-17.79004098226819!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x935a321c524ddaa1%3A0xc88b73f0e5081a4b!2sUniversidad%20Privada%20Domingo%20Savio%20Santa%20Cruz!5e0!3m2!1ses!2sbo!4v1706171918976!5m2!1ses!2sbo"
-                        allowfullscreen=""
-                        loading="lazy">
-                    </iframe>
+                <div class="map-container" style="text-align: right;">
+                    <a href="https://maps.app.goo.gl/hyQfw281UCQdVtDy9" target="_blank">
+                    <img src="imgs.jpg" alt="Mapa" style="width: 300px; height: 200px;">
+                    </a>
                 </div>
+
             </div>
         </div>
 

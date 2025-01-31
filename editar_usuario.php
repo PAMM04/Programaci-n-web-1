@@ -168,6 +168,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <select class="form-control" id="rol_id" name="rol_id" required>
                     <option value="1" <?php echo ($usuario['rol_id'] === 1) ? 'selected' : ''; ?>>Administrador</option>
                     <option value="2" <?php echo ($usuario['rol_id'] === 2) ? 'selected' : ''; ?>>Usuario</option>
+                    <option value="2" <?php echo ($usuario['rol_id'] === 4) ? 'selected' : ''; ?>>Auxiliar</option>
                 </select>
             </div>
             <input type="hidden" name="id_usuario" value="<?php echo $usuario['id_usuario']; ?>">

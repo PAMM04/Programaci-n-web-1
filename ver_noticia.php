@@ -28,10 +28,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['eliminar_comentario']
         $stmtEliminar->bind_param("i", $idComentarioEliminar);
         $stmtEliminar->execute();
         $stmtEliminar->close();
-        $mensaje = "Comentario eliminado con éxito.";
+        $_SESSION['mensaje'] = "Comentario eliminado con éxito.";
     } else {
-        $mensaje = "Error al intentar eliminar el comentario.";
+        $_SESSION['mensaje'] = "Error al intentar eliminar el comentario.";
     }
+    header("Location: ?id=$idnoticia");
+    exit;
 }
 
 // Procesar el formulario de comentario o respuesta
@@ -43,7 +45,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['comentario']) && !iss
 
     // Validación básica del comentario
     if (empty($comentario)) {
-        $mensaje = "El comentario no puede estar vacío.";
+        $_SESSION['mensaje'] = "El comentario no puede estar vacío.";
     } else {
         $queryComentario = "INSERT INTO comentarios (id_noticia, id_usuario, id_comentario_padre, contenido, estado) 
                             VALUES (?, ?, ?, ?, ?)";
@@ -53,16 +55,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['comentario']) && !iss
             $estado = 'activo'; // Estado predeterminado
             $stmtComentario->bind_param("iiiss", $idnoticia, $idusuario, $comentarioPadre, $comentario, $estado);
             if ($stmtComentario->execute()) {
-                $stmtComentario->close();
-                $mensaje = "Comentario enviado con éxito.";
+                $_SESSION['mensaje'] = "Comentario enviado con éxito.";
             } else {
-                $mensaje = "Error al enviar el comentario: " . $conexion->error;
+                $_SESSION['mensaje'] = "Error al enviar el comentario: " . $conexion->error;
             }
+            $stmtComentario->close();
         } else {
-            $mensaje = "Error al preparar la consulta de comentario: " . $conexion->error;
+            $_SESSION['mensaje'] = "Error al preparar la consulta de comentario: " . $conexion->error;
         }
     }
+    header("Location: ?id=$idnoticia");
+    exit;
 }
+
+// Mostrar mensaje si existe
+$mensaje = '';
+if (isset($_SESSION['mensaje'])) {
+    $mensaje = $_SESSION['mensaje'];
+    unset($_SESSION['mensaje']);
+}
+
 
 // Obtener los detalles de la noticia
 $queryNoticia = "SELECT n.titulo, n.contenido, n.imagen, n.fecha_creacion, c.nombre AS categoria 
@@ -143,14 +155,13 @@ while ($comentario = $resultComentarios->fetch_assoc()) {
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
         <div class="container-fluid">
-            <a class="navbar-brand" href="dashboard.php">Mi Sitio</a>
+            <a class="navbar-brand" href="dashboard.php">Vortex News</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item"><a class="nav-link" href="dashboard.php">Inicio</a></li>
-                    <li class="nav-item"><a class="nav-link" href="logout.php">Cerrar sesión</a></li>
                 </ul>
             </div>
         </div>

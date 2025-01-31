@@ -1,8 +1,8 @@
 <?php
-$host="localhost";
-$usuario="root";
-$password="";
-$db="db_proyecto";
+$host="sql204.infinityfree.com";
+$usuario="if0_38184675";
+$password="O6qe0ISbmECy";
+$db="if0_38184675_db_proyecto";
 $conexion = new mysqli($host,$usuario,$password,$db);
 
 

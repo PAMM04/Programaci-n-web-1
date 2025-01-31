@@ -140,7 +140,7 @@ if ($categoriaSeleccionada) {
                                 <li><a class="dropdown-item" href="lista_noticias.php">Noticias</a></li>
                             <?php endif; ?>
                             <?php if ($puedeGestionarUsuarios): ?>
-                                <li><a class="dropdown-item" href="manage_users.php">Comentarios</a></li>
+                                <li><a class="dropdown-item" href="administrar_comentarios.php">Comentarios</a></li>
                             <?php endif; ?>
                             <?php if ($puedeGestionarUsuarios): ?>
                                 <li><a class="dropdown-item" href="manage_users.php">Reportes</a></li>
