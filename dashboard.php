@@ -111,6 +111,8 @@ if ($categoriaSeleccionada) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+
     <link href="styles.css" rel="stylesheet">
 </head>
 <body>
@@ -125,6 +127,24 @@ if ($categoriaSeleccionada) {
                 <input class="form-control me-2" type="search" name="search" placeholder="Buscar" aria-label="Buscar">
                 <button class="btn btn-primary" type="submit">Buscar</button>
             </form>
+            <ul class="navbar-nav ms-3">
+    <!-- Icono de bandeja de entrada (solo para usuarios autenticados que no sean invitados) -->
+    <?php if (isset($_SESSION['id_usuario']) && $usuario['rol_id'] != 3): ?>
+        <li class="nav-item">
+        <a class="nav-link position-relative" href="bandeja_entrada.php">
+        <i class="bi bi-envelope-fill fs-4"></i>
+
+    <?php include("notificaciones.php"); ?>
+</a>
+
+
+
+</li>
+
+
+    <?php endif; ?>
+</ul>
+
             <ul class="navbar-nav ms-3">
                 <!-- Menú Gestión -->
                 <?php if ($puedeGestionarUsuarios || $puedeCrearNoticia): ?>
@@ -143,10 +163,10 @@ if ($categoriaSeleccionada) {
                                 <li><a class="dropdown-item" href="administrar_comentarios.php">Comentarios</a></li>
                             <?php endif; ?>
                             <?php if ($puedeGestionarUsuarios): ?>
-                                <li><a class="dropdown-item" href="manage_users.php">Reportes</a></li>
+                                <li><a class="dropdown-item" href="reportes.php">Reportes</a></li>
                             <?php endif; ?>
                             <?php if ($puedeGestionarUsuarios): ?>
-                                <li><a class="dropdown-item" href="manage_users.php">Mensajes y Notificaciones</a></li>
+                                <li><a class="dropdown-item" href="admin_mensajes.php">Mensajes</a></li>
                             <?php endif; ?>
                             <?php if ($puedeGestionarUsuarios): ?>
                                 <li><a class="dropdown-item" href="manage_users.php">Configuraciones</a></li>
@@ -229,5 +249,6 @@ if ($categoriaSeleccionada) {
     </div>
 </footer>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
 </body>
 </html>
