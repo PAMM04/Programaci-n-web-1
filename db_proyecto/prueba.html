@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Menú Desplegable con Click</title>
+  <style>
+    /* Estilo general del menú */
+    ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    li {
+      position: relative;
+    }
+
+    /* Estilo del menú principal */
+    .menu {
+      background-color: #333;
+      padding: 0;
+    }
+
+    .menu > li {
+      display: inline-block;
+    }
+
+    .menu > li > a {
+      color: white;
+      text-decoration: none;
+      padding: 10px 20px;
+      display: block;
+      cursor: pointer;
+    }
+
+    .menu > li > a:hover {
+      background-color: #555;
+    }
+
+    /* Menú desplegable */
+    .submenu, .submenu-2 {
+      display: none;
+      position: absolute;
+      background-color: #444;
+      padding: 0;
+      top: 100%; /* Coloca el menú justo debajo */
+      left: 0;
+      z-index: 1000;
+    }
+
+    .submenu li a, .submenu-2 li a {
+      color: white;
+      text-decoration: none;
+      padding: 10px 20px;
+      display: block;
+    }
+
+    .submenu li a:hover, .submenu-2 li a:hover {
+      background-color: #555;
+    }
+
+    /* Mostrar el submenú al agregar la clase "show" */
+    .submenu.show, .submenu-2.show {
+      display: block;
+    }
+
+    /* Submenú anidado a la derecha */
+    .submenu-2 {
+      left: 100%; /* Coloca el submenú a la derecha */
+      top: 0;
+    }
+  </style>
+</head>
+<body>
+  <ul class="menu">
+    <li><a href="#">Inicio</a></li>
+    <li>
+      <a href="#" class="menu-link">Servicios</a>
+      <ul class="submenu">
+        <li><a href="#">Diseño Web</a></li>
+        <li>
+          <a href="#" class="menu-link">Programación</a>
+          <ul class="submenu-2">
+            <li><a href="#">Frontend</a></li>
+            <li><a href="#">Backend</a></li>
+            <li><a href="#">Fullstack</a></li>
+          </ul>
+        </li>
+        <li><a href="#">Marketing</a></li>
+      </ul>
+    </li>
+    <li><a href="#">Contacto</a></li>
+  </ul>
+
+  <script>
+    // Seleccionar todos los elementos con la clase "menu-link"
+    const menuLinks = document.querySelectorAll('.menu-link');
+
+    menuLinks.forEach(link => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault(); // Evitar que el enlace recargue la página
+
+        // Alternar el submenú asociado
+        const submenu = link.nextElementSibling;
+        if (submenu) {
+          submenu.classList.toggle('show'); // Mostrar u ocultar el submenú
+        }
+
+        // Cerrar otros submenús abiertos
+        document.querySelectorAll('.submenu.show, .submenu-2.show').forEach(openMenu => {
+          if (openMenu !== submenu) {
+            openMenu.classList.remove('show');
+          }
+        });
+      });
+    });
+
+    // Cerrar el menú al hacer clic fuera de él
+    document.addEventListener('click', (e) => {
+      if (!e.target.closest('.menu')) {
+        document.querySelectorAll('.submenu.show, .submenu-2.show').forEach(openMenu => {
+          openMenu.classList.remove('show');
+        });
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,122 @@
+/* bandeja.css */
+
+/* Fondo de la página */
+body {
+    background-color: #f4f7fa;
+    font-family: 'Arial', sans-serif;
+    color: #333;
+}
+
+/* Encabezado */
+h2 {
+    font-size: 1.8rem;
+    color: #000000;
+    margin-bottom: 20px;
+}
+
+/* Botón Volver al Dashboard */
+.btn-primary {
+    background-color: #007bff;
+    border-color: #007bff;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3;
+    border-color: #004085;
+}
+
+/* Estilo de la tabla */
+.table {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.table th, .table td {
+    vertical-align: middle;
+    padding: 15px;
+    text-align: center;
+}
+
+.table th {
+    background-color: #007bff;
+    color: white;
+    font-weight: bold;
+}
+
+.table tbody tr:hover {
+    background-color: #f1f1f1;
+    cursor: pointer;
+}
+
+.table-warning {
+    background-color: #fff3cd;
+}
+
+.table-light {
+    background-color: #f8f9fa;
+}
+
+/* Estilo de los botones dentro de la tabla */
+.btn {
+    border-radius: 5px;
+}
+
+/* Botón Ver mensaje - Gris Moderno */
+/* Botón Ver mensaje - Azul Suave */
+.btn-info {
+    background-color: #3b82f6;  /* Azul más claro */
+    border-color: #3b82f6;
+}
+
+.btn-info:hover {
+    background-color: #2563eb;  /* Azul más oscuro */
+    border-color: #1e40af;
+}
+
+
+
+.btn-success {
+    background-color: #28a745;
+    border-color: #28a745;
+}
+
+.btn-success:hover {
+    background-color: #218838;
+    border-color: #1e7e34;
+}
+
+/* Ajuste de la tabla para pantallas pequeñas */
+@media (max-width: 768px) {
+    .table th, .table td {
+        font-size: 0.9rem;
+    }
+
+    h2 {
+        font-size: 1.5rem;
+    }
+
+    .btn {
+        font-size: 0.8rem;
+    }
+}
+
+/* Mensajes de alerta */
+.alert {
+    border-radius: 8px;
+    margin-bottom: 20px;
+    padding: 10px;
+    font-size: 1.1rem;
+}
+
+.alert-success {
+    background-color: #d4edda;
+    color: #155724;
+    border-color: #c3e6cb;
+}
+
+.alert-danger {
+    background-color: #f8d7da;
+    color: #721c24;
+    border-color: #f5c6cb;
+}
